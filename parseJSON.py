@@ -41,7 +41,7 @@ def parseCheckinData():
     with open('yelp_checkin.JSON', 'r') as f:
         outfile = open('checkins.txt', 'w')
         line = f.readline() 
-         
+        count_line = 0
         while line:
             data = json.loads(line)
             outfile.write(cleanStr4SQL(data['business_id'])+'\t')
@@ -49,7 +49,8 @@ def parseCheckinData():
             outfile.write('\n')
 
             line = f.readline()
-
+            count_line +=1
+    print(count_line)
     outfile.close()
     f.close()
     pass
@@ -59,7 +60,7 @@ def parseTipData():
     with open('yelp_tip.JSON', 'r') as f:
         outfile = open('tip.txt', 'w')
         line = f.readline() 
-        
+        count_line = 0
         while line:
             data = json.loads(line)
             outfile.write(cleanStr4SQL(data['business_id'])+'\t')
@@ -71,6 +72,8 @@ def parseTipData():
             outfile.write('\n')
 
             line = f.readline()
+            count_line +=1
+    print(count_line)
 
     outfile.close()
     f.close()
@@ -80,7 +83,7 @@ def parseUserData():
     with open('yelp_user.JSON','r') as f:
         outfile = open('user.txt','w')
         line = f.readline()
-
+        count_line = 0
         while line:
             data = json.loads(line)
             outfile.write(str(data['average_stars']) + '\t')
@@ -95,8 +98,10 @@ def parseUserData():
             outfile.write(str(data['yelping_since']) + '\t')
             outfile.write('\n')
             line = f.readline()
-        outfile.close()
-        f.close()
+            count_line +=1
+    print(count_line)
+    outfile.close()
+    f.close()
 
 
 parseBusinessData()
