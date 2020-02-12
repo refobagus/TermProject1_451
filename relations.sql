@@ -11,7 +11,7 @@ CREATE TABLE Business (
 	numCheckins INT,
 	isOpen INT,
 	review_count INT,
-	PRIMARY KEY (busID)
+	PRIMARY KEY (busID),
 );
 
 CREATE TABLE Hours (
@@ -19,7 +19,7 @@ CREATE TABLE Hours (
 	day VARCHAR(10),
 	openclose VARCHAR(50),
 	PRIMARY KEY (busID, day, openclose),
-	FOREIGN KEY (busID) REFERENCES Business(busID)
+	FOREIGN KEY (busID) REFERENCES Business(busID),
 );
 
 CREATE TABLE Attribute (
@@ -27,10 +27,10 @@ CREATE TABLE Attribute (
 	attribute_name VARCHAR(50) NOT NULL,
 	value VARCHAR(50),
 	PRIMARY KEY (busID, attribute_name),
-	FOREIGN KEY (busID) REFERENCES Business(busID)
+	FOREIGN KEY (busID) REFERENCES Business(busID),
 );
 
-CREATE TABLE User (
+CREATE TABLE [User] (
 	avgStar INT,
 	cool INT,
 	fans INT,
@@ -47,9 +47,9 @@ CREATE TABLE Tip (
 	busID VARCHAR(500) NOT NULL,
 	date VARCHAR(500),
 	likes INT,
-	text VARCHAR(10000),
+	text VARCHAR(MAX),
     userID VARCHAR(500) NOT NULL,
-	FOREIGN (busID) REFERENCES Business(busID)
+	FOREIGN KEY (busID) REFERENCES Business(busID)
 );
 
 
