@@ -11,44 +11,26 @@ namespace Milestone1
 {
 
 
-    public partial class _Default
+    public partial class BusinessInfo
     {
 
         /// <summary>
-        /// StateSelector control.
+        /// BusinessSelectedAlert control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl StateSelector;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl BusinessSelectedAlert;
 
         /// <summary>
-        /// ddlState control.
+        /// businessForm control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlState;
-
-        /// <summary>
-        /// ddlCity control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCity;
-
-        /// <summary>
-        /// gvBusinesses control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvBusinesses;
+        protected global::System.Web.UI.WebControls.FormView businessForm;
 
         /// <summary>
         /// lblError control.
