@@ -1,3 +1,4 @@
+-- Create this table first
 CREATE TABLE Business (
 	busID VARCHAR(500),
 	name VARCHAR(500),
@@ -14,11 +15,30 @@ CREATE TABLE Business (
 	PRIMARY KEY (busID),
 );
 
-CREATE TABLE Hours (
+-- Create this table second
+CREATE TABLE Users (
+	userID VARCHAR(50) NOT NULL,
+	avgStar INT,
+	cool INT,
+	fans INT,
+	funny INT, 
+	name VARCHAR(50),
+	tipcount INT,
+	numLikes INT,
+	useful INT,
+	yelping_since VARCHAR(500),
+	latitude VARCHAR(50),
+	longitude VARCHAR(50),
+	PRIMARY KEY (userID)
+);
+
+CREATE TABLE businessHours (
 	busID VARCHAR(50),
-	day VARCHAR(10),
+	dayofWeek VARCHAR(10),
 	openclose VARCHAR(50),
-	PRIMARY KEY (busID, day, openclose),
+	openTime TIME,
+	closeTime TIME,
+	PRIMARY KEY (busID, day),
 	FOREIGN KEY (busID) REFERENCES Business(busID),
 );
 
@@ -30,26 +50,15 @@ CREATE TABLE Attribute (
 	FOREIGN KEY (busID) REFERENCES Business(busID),
 );
 
-CREATE TABLE [User] (
-	avgStar INT,
-	cool INT,
-	fans INT,
-	funny INT, 
-	name VARCHAR(50),
-	tipcount INT,
-	useful INT,
-	userID VARCHAR(50) NOT NULL,
-	yelping_since VARCHAR(500),
-	PRIMARY KEY (userID)
-);
-
 CREATE TABLE Tip (
 	busID VARCHAR(500) NOT NULL,
-	date VARCHAR(500),
+	userID VARCHAR(500) NOT NULL,
 	likes INT,
-	text VARCHAR(MAX),
-    userID VARCHAR(500) NOT NULL,
-	FOREIGN KEY (busID) REFERENCES Business(busID)
+	tip VARCHAR(MAX),
+	madeOn DATETIME,
+	PRIMARY KEY(busID,userID,madeOn),
+	FOREIGN KEY (busID) REFERENCES Business(busID),
+	FOREIGN KEY(userID) REFERENCES Users(userID)
 );
 
 
