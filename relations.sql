@@ -1,11 +1,11 @@
 -- Create this table first
 CREATE TABLE Business (
-	busID VARCHAR(500),
+	bus_id VARCHAR(500),
 	name VARCHAR(500),
 	address VARCHAR(500),
-	city VARCHAR(500),
 	state VARCHAR(500),
-	postal_code VARCHAR(500),
+	city VARCHAR(500),
+	zipcode VARCHAR(500),
 	latitude VARCHAR(500),
 	longitude VARCHAR(500),
 	stars INT,
@@ -35,20 +35,19 @@ CREATE TABLE Users (
 CREATE TABLE businessHours (
 	busID VARCHAR(50),
 	dayofWeek VARCHAR(10),
-	openclose VARCHAR(50),
 	openTime TIME,
 	closeTime TIME,
 	PRIMARY KEY (busID, day),
 	FOREIGN KEY (busID) REFERENCES Business(busID),
 );
 
-CREATE TABLE Attribute (
-	busID VARCHAR(50),
-	attribute_name VARCHAR(50) NOT NULL,
-	value VARCHAR(50),
-	PRIMARY KEY (busID, attribute_name),
-	FOREIGN KEY (busID) REFERENCES Business(busID),
-);
+-- CREATE TABLE Attribute (
+-- 	busID VARCHAR(50),
+-- 	attribute_name VARCHAR(50) NOT NULL,
+-- 	value VARCHAR(50),
+-- 	PRIMARY KEY (busID, attribute_name),
+-- 	FOREIGN KEY (busID) REFERENCES Business(busID),
+-- );
 
 CREATE TABLE Tip (
 	busID VARCHAR(500) NOT NULL,
