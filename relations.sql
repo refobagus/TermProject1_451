@@ -1,4 +1,6 @@
 -- Create this table first
+
+
 CREATE TABLE Business (
 	bus_id VARCHAR(500),
 	name VARCHAR(500),
@@ -10,15 +12,15 @@ CREATE TABLE Business (
 	longitude VARCHAR(500),
 	stars INT,
 	numCheckins INT,
-	isOpen INT,
 	review_count INT,
-	PRIMARY KEY (busID),
+	isOpen INT,
+	PRIMARY KEY (bus_id)
 );
 
 -- Create this table second
 CREATE TABLE Users (
 	userID VARCHAR(50) NOT NULL,
-	avgStar INT,
+	avgStar FLOAT,
 	cool INT,
 	fans INT,
 	funny INT, 
@@ -37,33 +39,27 @@ CREATE TABLE businessHours (
 	dayofWeek VARCHAR(10),
 	openTime TIME,
 	closeTime TIME,
-	PRIMARY KEY (busID, day),
-	FOREIGN KEY (busID) REFERENCES Business(busID),
+	PRIMARY KEY (busID, dayofWeek),
+	FOREIGN KEY (busID) REFERENCES Business(bus_id)
 );
 
--- CREATE TABLE Attribute (
--- 	busID VARCHAR(50),
--- 	attribute_name VARCHAR(50) NOT NULL,
--- 	value VARCHAR(50),
--- 	PRIMARY KEY (busID, attribute_name),
--- 	FOREIGN KEY (busID) REFERENCES Business(busID),
--- );
 
 CREATE TABLE Tip (
 	busID VARCHAR(500) NOT NULL,
 	userID VARCHAR(500) NOT NULL,
 	likes INT,
-	tip VARCHAR(MAX),
-	madeOn DATETIME,
+	tip VARCHAR(1000),
+	madeOn TIMESTAMP,
 	PRIMARY KEY(busID,userID,madeOn),
-	FOREIGN KEY (busID) REFERENCES Business(busID),
+	FOREIGN KEY (busID) REFERENCES Business(bus_id),
 	FOREIGN KEY(userID) REFERENCES Users(userID)
 );
 
 
+
 CREATE TABLE CheckIn (
 	busID VARCHAR(50),
-	date VARCHAR(50),
-	PRIMARY KEY (busID),
-	FOREIGN KEY (busID) REFERENCES Business(busID)
+	date TIMESTAMP,
+	PRIMARY KEY (busID, date),
+	FOREIGN KEY (busID) REFERENCES Business(bus_id)
 );
