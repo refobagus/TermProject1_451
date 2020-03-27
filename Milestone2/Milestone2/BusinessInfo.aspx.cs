@@ -13,7 +13,7 @@ namespace Milestone2
     
             protected string buildConnectionString()
             {
-                return "Host = localhost; username = GuestUser; Database = dbmilestonev1; password=abcd123";
+                return "Host = localhost; username = GuestUser; Database = Milestone2; password=abcd123";
             }
 
             protected void Page_Load(object sender, EventArgs e)
@@ -24,8 +24,8 @@ namespace Milestone2
                 }
 
                 string businessID = Request.QueryString["BusinessID"].ToString();
-                getBusinessData(businessID);
-
+            getBusinessData(businessID);
+            getTips();
             }
 
             protected void donebtn_Click(object sender, EventArgs e)
@@ -62,17 +62,18 @@ namespace Milestone2
                 }
 
 
-                StateCount = GetStateCount(State);
-                CityCount = GetCityCount(City);
-                List<BusinessStats> businessStats = new List<BusinessStats>();
-                businessStats.Add(new BusinessStats(businessID, BusinessName, State, City, CityCount, StateCount));
-                businessForm.DataSource = businessStats;
-                businessForm.DataBind();
+            StateCount = GetStateCount(State);
+            CityCount = GetCityCount(City);
 
-                BusinessSelectedAlert.Visible = true;
+            List<BusinessStats> businessStats = new List<BusinessStats>();
+            businessStats.Add(new BusinessStats(businessID, BusinessName, State, City, CityCount, StateCount));
+            businessForm.DataSource = businessStats;
+            businessForm.DataBind();
 
-                connection.Close();
-            }
+            BusinessSelectedAlert.Visible = true;    
+            connection.Close();
+            
+        }
 
             protected string GetStateCount(string state)
             {
@@ -125,6 +126,62 @@ namespace Milestone2
                 return cityCount.ToString();
             }
 
+        protected void getTips()
+        {
+
+            var connection = new NpgsqlConnection(buildConnectionString());
+            List<BusinessTips> tips = new List<BusinessTips>();
+            connection.Open();
+            var cmd = new NpgsqlCommand();
+            cmd.Connection = connection;
+            cmd.CommandText = "SELECT DISTINCT Users.userID, Users.name, tip.likes, tip.tip, tip.madeon " +
+                "FROM Tip INNER JOIN Users ON Tip.userID = Users.userID " +
+                "WHERE tip.busID = " + "'" + Request.QueryString["BusinessID"].ToString() + "' ORDER BY tip.likes";
+            try
+            {
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    tips.Add(new BusinessTips(reader.GetString(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3), reader.GetDateTime(4)));
+                }
+            }
+            catch(Exception ex)
+            {
+                lblError.Text = ex.Message;
+                return;
+            }
+            gvTips.DataSource = tips;
+            gvTips.DataBind();
+        }
+
+        protected class BusinessTips
+        {
+            public BusinessTips()
+            {
+                this.userID = string.Empty;
+                this.userName = string.Empty;
+                this.likes = 0;
+                this.tip = string.Empty;
+                this.timeMade = DateTime.Today;
+
+            }
+            public BusinessTips(string userID, string userName, int likes, string tip, DateTime timeMade)
+            {
+                this.userID = userID;
+                this.userName = userName;
+                this.likes = likes;
+                this.tip = tip;
+                this.timeMade = timeMade;
+
+            }
+
+            public string userID { get; set; }
+            public string userName { get; set; }
+            public int likes { get; set; }
+            public string tip { get; set; }
+            public DateTime timeMade { get; set; }
+      
+        }
             public class BusinessStats
             {
                 public BusinessStats()

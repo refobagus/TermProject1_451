@@ -1,4 +1,6 @@
 -- Create this table first
+
+
 CREATE TABLE Business (
 	bus_id VARCHAR(500),
 	name VARCHAR(500),
@@ -18,7 +20,7 @@ CREATE TABLE Business (
 -- Create this table second
 CREATE TABLE Users (
 	userID VARCHAR(50) NOT NULL,
-	avgStar INT,
+	avgStar FLOAT,
 	cool INT,
 	fans INT,
 	funny INT, 
@@ -46,17 +48,18 @@ CREATE TABLE Tip (
 	busID VARCHAR(500) NOT NULL,
 	userID VARCHAR(500) NOT NULL,
 	likes INT,
-	tip VARCHAR(500),
-	madeOn date,
+	tip VARCHAR(1000),
+	madeOn TIMESTAMP,
 	PRIMARY KEY(busID,userID,madeOn),
 	FOREIGN KEY (busID) REFERENCES Business(busID),
 	FOREIGN KEY(userID) REFERENCES Users(userID)
 );
 
 
+
 CREATE TABLE CheckIn (
 	busID VARCHAR(50),
-	date VARCHAR(50),
-	PRIMARY KEY (busID),
+	date TIMESTAMP,
+	PRIMARY KEY (busID, date),
 	FOREIGN KEY (busID) REFERENCES Business(busID)
 );
