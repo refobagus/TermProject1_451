@@ -75,10 +75,10 @@ def insert2businessHours():
             data = json.loads(line)
             if data['hours']!={}:
                 for x,y in data['hours'].items():
-                    tem=(y.split("-"))
-                    #print(data['business_id'],x,tem[0],tem[1])
+                    time=(y.split("-"))
+                    #print(data['business_id'],x,time[0],time[1])
                     sql_str = "INSERT INTO businessHours (busID, dayofWeek,openTime,closeTime) " \
-                            "VALUES ('" + cleanStr4SQL(data['business_id']) + "','" + x + "','" + tem[0]+"','"+tem[1]+"');"
+                            "VALUES ('" + cleanStr4SQL(data['business_id']) + "','" + x + "','" + time[0]+"','"+time[1]+"');"
                     try:
                         cur.execute(sql_str)
                     except:
@@ -91,6 +91,48 @@ def insert2businessHours():
             line = f.readline()
         cur.close()
         conn.close()
+    print(count_line)
+    outfile.close()  #uncomment this line if you are writing the INSERT statements to an output file.
+    f.close()
+
+def insert2Categories():
+    #reading the JSON file
+    with open('./yelp_business.JSON','r') as f:    #TODO: update path for the input file
+        outfile =  open('./yelp_categories.SQL', 'w')  #uncomment this line if you are writing the INSERT statements to an output file.
+        line = f.readline()
+        count_line = 0
+
+        #connect to yelpdb database on postgres server using psycopg2
+        #TODO: update the database name, username, and password
+        try:
+            conn = psycopg2.connect("dbname='yelpdb' user='postgres' host='localhost' password='wartech25'")
+        except:
+            print('Unable to connect to the database!')
+        cur = conn.cursor()
+
+        while line:
+            data = json.loads(line)
+            # for category in data['categories']:
+            s = cleanStr4SQL(data['categories'])
+            cat = s.split(", ")
+            for x in cat:
+                sql_str = "INSERT INTO Categories (busID, category) " \
+                        "VALUES ('" + cleanStr4SQL(data['business_id']) + "','" + x +"');"
+                try:
+                        cur.execute(sql_str)
+                except:
+                        print("Insert to businessTABLE failed! \n" + sql_str)
+                        return
+                conn.commit()
+                    # optionally you might write the INSERT statement to a file.
+                count_line +=1
+                outfile.write(sql_str)
+            line = f.readline()
+            
+
+        cur.close()
+        conn.close()
+
     print(count_line)
     outfile.close()  #uncomment this line if you are writing the INSERT statements to an output file.
     f.close()
@@ -214,4 +256,5 @@ def insert2Checkins():
 #insert2businessHours()
 #insert2Users()
 #insert2Tips()
-insert2Checkins()
+#insert2Checkins()
+insert2Categories()

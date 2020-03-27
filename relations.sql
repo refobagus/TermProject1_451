@@ -43,6 +43,11 @@ CREATE TABLE businessHours (
 	FOREIGN KEY (busID) REFERENCES Business(bus_id)
 );
 
+CREATE TABLE Categories (
+	busID VARCHAR(50),
+	category VARCHAR(100),
+	FOREIGN KEY (busID) REFERENCES Business(bus_id)
+);
 
 CREATE TABLE Tip (
 	busID VARCHAR(500) NOT NULL,

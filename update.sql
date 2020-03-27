@@ -7,9 +7,14 @@ UPDATE business
 SET review_count = (SELECT COUNT(busID) FROM tip WHERE busID = bus_id GROUP BY bus_id);
 
 /* tipcount */
-(SELECT users.userID,COUNT(tip.userID) FROM tip,users 
+-- (SELECT users.userID,COUNT(tip.userID) FROM tip,users 
+-- WHERE users.userID = tip.userID GROUP BY users.userID);
+UPDATE users
+SET tipcount = (SELECT COUNT(tip.userID) FROM tip
 WHERE users.userID = tip.userID GROUP BY users.userID);
 
 /* numLikes */
-(SELECT users.userID,SUM(tip.likes) FROM 
-tip,users WHERE tip.userID = users.userID GROUP BY users.userID);
+-- (SELECT users.userID,SUM(tip.likes) FROM 
+-- tip,users WHERE tip.userID = users.userID GROUP BY users.userID);
+UPDATE users
+SET numLikes = (SELECT SUM(tip.likes) FROM tip WHERE tip.userID = users.userID GROUP BY users.userID)
