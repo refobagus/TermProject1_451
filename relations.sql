@@ -1,5 +1,5 @@
 -- Create this table first
-
+/*
 
 CREATE TABLE Business (
 	bus_id VARCHAR(500),
@@ -63,3 +63,10 @@ CREATE TABLE CheckIn (
 	PRIMARY KEY (busID, date),
 	FOREIGN KEY (busID) REFERENCES Business(busID)
 );
+*/
+CREATE TABLE Categories (
+	busID VARCHAR(50),
+	category VARCHAR(100),
+	PRIMARY KEY (busID, category),
+	FOREIGN KEY (busID) REFERENCES Business(busID)
+)

@@ -18,9 +18,15 @@ namespace Milestone2
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            if (Session["userID"] != null)
+            {
+                divApplicationLogin.Visible = false;
+                ApplicationHomePage.Visible = true;
+
+            }
             if (!Page.IsPostBack)
             {
+
                 lblError.Text = string.Empty;
                 var connection = new NpgsqlConnection(buildConnectionString());
                 connection.Open();
@@ -43,7 +49,7 @@ namespace Milestone2
                 lbStates.DataSource = StateList;
                 lbStates.DataBind();
 
-                if(StateList.Count == 0)
+                if (StateList.Count == 0)
                 {
                     lblError.Text = "No States Found to select from";
                 }
@@ -79,7 +85,7 @@ namespace Milestone2
             lbCities.DataSource = City;
             lbCities.DataBind();
 
-            if(City.Count > 0)
+            if (City.Count > 0)
             {
                 divCity.Visible = true;
             }
@@ -105,25 +111,25 @@ namespace Milestone2
             try
             {
                 var reader = cmd.ExecuteReader();
-                while(reader.Read())
+                while (reader.Read())
                 {
                     postalCodes.Add(reader.GetString(0));
                 }
             }
-            catch(NpgsqlException ex)
+            catch (NpgsqlException ex)
             {
                 lblError.Text = ex.Message;
             }
             lbPostalCode.DataSource = postalCodes;
             lbPostalCode.DataBind();
-            if(postalCodes.Count > 0)
+            if (postalCodes.Count > 0)
             {
                 divPostalCodes.Visible = true;
             }
             connection.Close();
 
         }
-        protected void getBusinesses(string postalCode)
+        protected void getBusinesses()
         {
             lblError.Text = string.Empty;
             var connection = new NpgsqlConnection(buildConnectionString());
@@ -132,27 +138,32 @@ namespace Milestone2
 
             var cmd = new NpgsqlCommand();
             cmd.Connection = connection;
-            if(!String.IsNullOrEmpty(postalCode))
+
+            if (!String.IsNullOrEmpty(lbCategories.SelectedValue))
             {
-                cmd.CommandText = "SELECT * FROM business WHERE postal_code = " + "'" + postalCode + "'" + " AND city = " + "'" + lbCities.SelectedValue + "'" + "ORDER BY name";
+                cmd.CommandText = "SELECT DISTINCT business.busID, business.name, business.state, business.city " +
+                    "FROM business INNER JOIN Categories ON business.busID = Categories.busID" +
+                    " WHERE category = '" + lbCategories.SelectedValue + "' AND postal_code = '" + lbPostalCode.SelectedValue + "' ORDER BY business.name";
+            }
+            else if (!String.IsNullOrEmpty(lbPostalCode.SelectedValue))
+            {
+                cmd.CommandText = "SELECT * FROM business WHERE postal_code = '" + lbPostalCode.SelectedValue + "' ORDER BY name";
+            }
+            else if (!String.IsNullOrEmpty(lbCities.SelectedValue))
+            {
+                cmd.CommandText = "SELECT * FROM business WHERE city = " + "'" + lbCities.SelectedValue + "'" + "ORDER BY name";
+            }
+            else if (!String.IsNullOrEmpty(lbStates.SelectedValue))
+            {
+                cmd.CommandText = "SELECT * FROM business WHERE state = " + "'" + lbStates.SelectedValue + "'" + "ORDER BY name";
             }
             else
             {
-                if(!String.IsNullOrEmpty(lbCities.SelectedValue))
-                {
-                    cmd.CommandText = "SELECT * FROM business WHERE city = " + "'" + lbCities.SelectedValue + "'" + "ORDER BY name";
-                }
-                else if(!String.IsNullOrEmpty(lbStates.SelectedValue))
-                {
-                    cmd.CommandText = "SELECT * FROM business WHERE state = " + "'" + lbStates.SelectedValue + "'" + "ORDER BY name";
-                }
-                else
-                {
-                    gvBusinesses.DataSource = new List<Business>();
-                    return;
-                }
+                gvBusinesses.DataSource = new List<Business>();
+                return;
             }
-            
+
+
             try
             {
                 var reader = cmd.ExecuteReader();
@@ -169,7 +180,7 @@ namespace Milestone2
             gvBusinesses.DataBind();
             connection.Close();
         }
-        /*
+
         protected void getCategories(string postalCode)
         {
             lblError.Text = string.Empty;
@@ -178,10 +189,80 @@ namespace Milestone2
             List<string> categories = new List<string>();
             var cmd = new NpgsqlCommand();
             cmd.Connection = connection;
-            cmd.CommandText = "SELECT DISTINCT "
+            if (!string.IsNullOrEmpty(lbCities.SelectedValue) && !String.IsNullOrEmpty(lbStates.SelectedValue) && !String.IsNullOrEmpty(lbPostalCode.SelectedValue))
+            {
+                cmd.CommandText = "SELECT DISTINCT category FROM Categories INNER JOIN Business on Business.busID = Categories.busID WHERE business.State = '"
+                + lbStates.SelectedValue + "' AND Business.city = '" + lbCities.SelectedValue + "' AND business.postal_code = '" + lbPostalCode.SelectedValue + "' ORDER BY category";
+                try
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        categories.Add(reader.GetString(0));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lblError.Text = "ERROR while getting categories: " + ex.Message;
+                    connection.Close();
+                    return;
+                }
+                lbCategories.DataSource = categories;
+                lbCategories.DataBind();
+                divCategories.Visible = true;
+                connection.Close();
+                return;
+
+            }
+            else
+            {
+                lblError.Text = "Please select a City State and Postal Code before Selecting a cagory";
+                connection.Close();
+                return;
+            }
+
+
         }
 
-    */
+
+
+        protected void bindUsers(string userName)
+        {
+            var connection = new NpgsqlConnection(buildConnectionString());
+            connection.Open();
+            var cmd = new NpgsqlCommand();
+            cmd.Connection = connection;
+            string tempUid = string.Empty, tempUName = string.Empty;
+
+            List<ListItem> users = new List<ListItem>();
+            var emptyUser = new ListItem(string.Empty, string.Empty);
+            emptyUser.Selected = true;
+            users.Add(emptyUser);
+            cmd.CommandText = "SELECT DISTINCT userID, name FROM Users WHERE name = '" + userName + "' ORDER BY name";
+
+            try
+            {
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    tempUid = reader.GetString(0);
+                    tempUName = reader.GetString(1);
+                    var li = new ListItem(tempUid);
+                    users.Add(li);
+                }
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Error while binding users: " + ex.Message;
+                return;
+            }
+
+            ddlUser.DataSource = users;
+            ddlUser.DataBind();
+            connection.Close();
+            return;
+        }
+
         public class Business
         {
             public Business()
@@ -210,23 +291,55 @@ namespace Milestone2
         protected void lbStates_SelectedIndexChanged(object sender, EventArgs e)
         {
             GetCities(lbStates.SelectedValue);
-            getBusinesses("");
+            getBusinesses();
+
+            List<string> emptyList = new List<string>();
+            lbPostalCode.DataSource = emptyList;
+            lbPostalCode.DataBind();
+            lbCategories.DataSource = emptyList;
+            lbCategories.DataBind();
+            
         }
 
         protected void lbCities_SelectedIndexChanged(object sender, EventArgs e)
         {
             getPostalCodes(lbCities.SelectedValue);
-            getBusinesses("");
+            getBusinesses();
+            List<string> emptyList = new List<string>();
+            lbCategories.DataSource = emptyList;
+            lbCategories.DataBind();
         }
 
         protected void lbPostalCode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            getBusinesses(lbPostalCode.SelectedValue);
+            getCategories(lbPostalCode.SelectedValue);
+            getBusinesses();
         }
 
         protected void lbCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
-            getBusinesses(lbCategories.SelectedValue);
+            getBusinesses();
+        }
+
+        protected void ddlUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string name = ddlUser.SelectedItem.Text;
+            string userID = ddlUser.SelectedValue;
+
+            userDDLSelect.Visible = false;
+            divApplicationLogin.Visible = false;
+
+            Session["userID"] = userID;
+            ApplicationHomePage.Visible = true;
+            
+        }
+
+        protected void btnSelect_Click(object sender, EventArgs e)
+        {
+            bindUsers(tbuser.Text.Trim());
+            btnSelect.Visible = false;
+            usernameSelect.Visible = false;
+            userDDLSelect.Visible = true;
         }
     }
 }

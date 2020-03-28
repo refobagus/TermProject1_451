@@ -7,6 +7,10 @@
             border: none;
         }
 
+        .gridView{
+            width: 80%;
+        }
+
         .SidSelectors {
             width: 30%;
             height: 100%;
@@ -19,13 +23,20 @@
             top: 40px;
             left: 20px;
             position: relative;
+            border:none;
         }
     </style>
 
-    <div id="ApplicationHomePage" style="text-align: center">
+    <div id="divApplicationLogin" style="text-align:center; font-size:20px; position:relative; margin-top:100px;" runat="server" visible="true">
+        <p id="usernameSelect" runat="server" >UserName: <asp:TextBox runat="server" ID="tbuser" placeholder="Username"></asp:TextBox></p> 
+        <asp:Button ID="btnSelect" runat="server" OnClick="btnSelect_Click" Text="Submit" />
+        <p id="userDDLSelect" runat="server" visible="false">Select yourself from the list: <asp:DropDownList ID="ddlUser" runat="server" OnSelectedIndexChanged="ddlUsers_SelectedIndexChanged" AutoPostBack="true" > 
 
+        </asp:DropDownList>
+            </p>
+    </div>
 
-
+    <div id="ApplicationHomePage" style="text-align: center; top:60px;" runat="server" visible =" false">
 
         <div id="divSelectors" class="SidSelectors" runat="server">
             <p>State</p>
@@ -49,11 +60,12 @@
         </div>
 
 
-        <div id="Businesses" style="text-align: center" class="gridViewContainer">
-            <asp:GridView runat="server" ID="gvBusinesses" AutoGenerateColumns="false">
+        <div id="Businesses" style="text-align: center; " class="gridViewContainer">
+            <asp:GridView runat="server" ID="gvBusinesses" AutoGenerateColumns="false" CssClass="gridView" BorderStyle="None">
                 <RowStyle CssClass="GridRow" />
 
                 <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                
                 <Columns>
                     <asp:HyperLinkField DataNavigateUrlFields="BusinessID"
                         DataNavigateUrlFormatString="~\BusinessInfo.aspx?businessID={0}"
