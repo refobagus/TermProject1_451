@@ -172,6 +172,39 @@ def insert2Users():
     print(count_line)
     f.close()
 
+def insert2Friends():
+    #reading the JSON file
+    with open('./yelp_user.JSON','r') as f:    
+        outfile =  open('./yelp_friends.SQL', 'w')  
+        line = f.readline()
+        count_line = 0
+        try:
+            conn = psycopg2.connect("dbname='yelpdb' user='postgres' host='localhost' password='wartech25'")
+        except:
+            print('Unable to connect to the database!')
+        cur = conn.cursor()
+
+        while line:
+            data = json.loads(line)
+            for val in data['friends']:
+                sql_str = "INSERT INTO Friends (user_ID, friend_ID) " \
+                          "VALUES ('" + cleanStr4SQL(data['user_id']) + "', '"  + str(val) + "');"
+                
+                try:
+                    cur.execute(sql_str)
+                except:
+                    print("Insert to friendsTABLE failed!" )
+                conn.commit()
+                outfile.write(sql_str + '\n')
+            line = f.readline()
+            count_line +=1
+        cur.close()
+        conn.close()
+
+    print(count_line)
+    outfile.close() 
+    f.close()
+
 def insert2Tips():
     with open('./yelp_tip.JSON','r') as f:
         outfile =  open('./yelp_tip.SQL', 'w')
@@ -257,4 +290,5 @@ def insert2Checkins():
 #insert2Users()
 #insert2Tips()
 #insert2Checkins()
-insert2Categories()
+#insert2Categories()
+insert2Friends()

@@ -49,6 +49,12 @@ CREATE TABLE Categories (
 	FOREIGN KEY (busID) REFERENCES Business(bus_id)
 );
 
+CREATE TABLE Friends (
+	user_ID VARCHAR(50),
+	friend_ID VARCHAR(100),
+	FOREIGN KEY (user_ID) REFERENCES Users(userID)
+);
+
 CREATE TABLE Tip (
 	busID VARCHAR(500) NOT NULL,
 	userID VARCHAR(500) NOT NULL,
