@@ -12,11 +12,9 @@ CREATE TABLE Business (
 	longitude VARCHAR(500),
 	stars INT,
 	numCheckins INT,
-	review_count INT,
-
 	isOpen INT,
-	PRIMARY KEY (bus_id)
-
+	review_count INT,
+	PRIMARY KEY (busID)
 );
 
 -- Create this table second
@@ -42,20 +40,9 @@ CREATE TABLE businessHours (
 	openTime TIME,
 	closeTime TIME,
 	PRIMARY KEY (busID, dayofWeek),
-	FOREIGN KEY (busID) REFERENCES Business(bus_id)
+	FOREIGN KEY (busID) REFERENCES Business(busID)
 );
 
-CREATE TABLE Categories (
-	busID VARCHAR(50),
-	category VARCHAR(100),
-	FOREIGN KEY (busID) REFERENCES Business(bus_id)
-);
-
-CREATE TABLE Friends (
-	user_ID VARCHAR(50),
-	friend_ID VARCHAR(100),
-	FOREIGN KEY (user_ID) REFERENCES Users(userID)
-);
 
 CREATE TABLE Tip (
 	busID VARCHAR(500) NOT NULL,
@@ -64,7 +51,7 @@ CREATE TABLE Tip (
 	tip VARCHAR(1000),
 	madeOn TIMESTAMP,
 	PRIMARY KEY(busID,userID,madeOn),
-	FOREIGN KEY (busID) REFERENCES Business(bus_id),
+	FOREIGN KEY (busID) REFERENCES Business(busID),
 	FOREIGN KEY(userID) REFERENCES Users(userID)
 );
 
@@ -74,7 +61,23 @@ CREATE TABLE CheckIn (
 	busID VARCHAR(50),
 	date TIMESTAMP,
 	PRIMARY KEY (busID, date),
+	FOREIGN KEY (busID) REFERENCES Business(busID)
+);
 
-	FOREIGN KEY (busID) REFERENCES Business(bus_id)
-  );
 
+CREATE TABLE Categories (
+	busID VARCHAR(50),
+	category VARCHAR(100),
+	PRIMARY KEY (busID, category),
+	FOREIGN KEY (busID) REFERENCES Business(busID)
+);
+
+
+CREATE TABLE Friends (
+	userID VARCHAR(50),
+	friendID VARCHAR(50),
+
+	PRIMARY KEY (userID, friendID),
+	FOREIGN KEY(userID) REFERENCES Users(userID)
+	
+);
