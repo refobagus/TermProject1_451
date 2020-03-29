@@ -42,8 +42,10 @@ SELECT COUNT(*)
 FROM  users;
 SELECT COUNT(*) 
 FROM  tip;
+/*
 SELECT COUNT(*) 
 FROM  friendstable;
+*/
 SELECT COUNT(*) 
 FROM  checkin;
 SELECT COUNT(*) 
@@ -57,7 +59,7 @@ FROM  businesshours;
 
 --2. Run the following queries on your business table, checkin table and review table. Make sure to change the attribute names based on your schema. 
 
-SELECT postal_code, count(business_id) 
+SELECT postal_code, count(busID) 
 FROM business
 GROUP BY postal_code
 HAVING count(busID) > 500
@@ -92,7 +94,7 @@ WHERE busID ='UvF68aNDfzCWQbxO6-647g' ;
 
 SELECT userID, name, tipcount, numLikes
 FROM users
-WHERE user_id = 'i3bLA4sEdFk8j3Pq6tx8wQ'
+WHERE userID = 'i3bLA4sEdFk8j3Pq6tx8wQ';
 
 -----------
 
@@ -118,27 +120,27 @@ FROM business
 WHERE busID ='M007_bAIM34x1yd138zhSQ';
 
 INSERT INTO checkin (busID, date)
-VALUES ('M007_bAIM34x1yd138zhSQ','2020-03-27 15:00');
+VALUES ('M007_bAIM34x1yd138zhSQ','2020-03-27 15:20');
 
 
 --5.
 --Type the following statements. Make sure to change the attribute names based on your schema.  
 
 SELECT busID ,name, city, numCheckins, review_count
-FROM businesstable 
+FROM business
 WHERE busID ='M007_bAIM34x1yd138zhSQ';
 
 SELECT userID, name, tipcount, numlikes
 FROM users
-WHERE userID = 'rRrFcSEZOTw6iZagsIwTFQ'
+WHERE userID = 'rRrFcSEZOTw6iZagsIwTFQ';
 
 
 INSERT INTO tip (userID, busID, madeOn, tip,likes)  
-VALUES ('rRrFcSEZOTw6iZagsIwTFQ','M007_bAIM34x1yd138zhSQ', '2020-03-27 13:00','EVERYTHING IS AWESOME',0);
+VALUES ('rRrFcSEZOTw6iZagsIwTFQ','M007_bAIM34x1yd138zhSQ', '2020-03-27 13:20','EVERYTHING IS AWESOME',0);
 
 UPDATE tip
 SET likes = likes+1
 WHERE userID = 'rRrFcSEZOTw6iZagsIwTFQ' AND 
       busID = 'M007_bAIM34x1yd138zhSQ' AND 
-      madeOn ='2020-03-27 13:00'
+      madeOn ='2020-03-27 13:20';
       

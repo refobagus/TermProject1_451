@@ -64,9 +64,20 @@ CREATE TABLE CheckIn (
 	FOREIGN KEY (busID) REFERENCES Business(busID)
 );
 */
+/*
 CREATE TABLE Categories (
 	busID VARCHAR(50),
 	category VARCHAR(100),
 	PRIMARY KEY (busID, category),
 	FOREIGN KEY (busID) REFERENCES Business(busID)
-)
+);
+*/
+
+CREATE TABLE Friends (
+	userID VARCHAR(50),
+	friendID VARCHAR(50),
+
+	PRIMARY KEY (userID, friendID),
+	FOREIGN KEY(userID) REFERENCES Users(userID)
+	
+);
