@@ -1,3 +1,4 @@
+
 import json
 import psycopg2
 
@@ -29,6 +30,7 @@ def insert2BusinessTable():
             # Generate the INSERT statement for the cussent business
             # TODO: The below INSERT statement is based on a simple (and incomplete) businesstable schema. Update the statement based on your own table schema and
             # include values for all businessTable attributes
+
             sql_str = "INSERT INTO business (busid, name, address, state, city, postal_code, latitude, longitude, stars, numCheckins, review_count, isopen) " \
                       "VALUES ('" + data['business_id'] + "','" + cleanStr4SQL(data["name"]) + "','" + cleanStr4SQL(data["address"]) + "','" + \
                       cleanStr4SQL(data["state"]) + "','" + cleanStr4SQL(data["city"]) + "','" + data["postal_code"] + "'," + str(data["latitude"]) + "," + \
@@ -36,7 +38,7 @@ def insert2BusinessTable():
             try:
                 cur.execute(sql_str)
             except:
-                print("Insert to businessTABLE failed!")
+                print("Insert to businessTABLE failed! \n" + sql_str)
             conn.commit()
             # optionally you might write the INSERT statement to a file.
             # outfile.write(sql_str)
@@ -51,6 +53,7 @@ def insert2BusinessTable():
     #outfile.close()  #uncomment this line if you are writing the INSERT statements to an output file.
     f.close()
 
+
 def insert2Categories():
     #reading the JSON file
     with open('./yelp_business.JSON','r') as f:    #TODO: update path for the input file
@@ -59,11 +62,14 @@ def insert2Categories():
         count_line = 0
 
         #connect to yelpdb database on postgres server using psycopg2
-        #TODO: update the database name, username, and password
         try:
             conn = psycopg2.connect("dbname='Milestone2' user='GuestUser' host='localhost' password='abcd123'")
-        except:
-            print('Unable to connect to the database!')
+        except Exception as inst:
+            print('Unable to connect to the database!' )
+            print(type(inst))
+            print(inst.args)
+            print(inst)
+            return
         cur = conn.cursor()
 
         while line:
@@ -116,10 +122,12 @@ def insert2businessHours():
             data = json.loads(line)
             if data['hours']!={}:
                 for x,y in data['hours'].items():
-                    tem=(y.split("-"))
-                    #print(data['business_id'],x,tem[0],tem[1])
+
+                    time=(y.split("-"))
+                    #print(data['business_id'],x,time[0],time[1])
                     sql_str = "INSERT INTO businessHours (busID, dayofWeek,openTime,closeTime) " \
-                            "VALUES ('" + cleanStr4SQL(data['business_id']) + "','" + x + "','" + tem[0]+"','"+tem[1]+"');"
+                            "VALUES ('" + cleanStr4SQL(data['business_id']) + "','" + x + "','" + time[0]+"','"+time[1]+"');"
+
                     try:
                         cur.execute(sql_str)
                     except:
@@ -132,6 +140,48 @@ def insert2businessHours():
             line = f.readline()
         cur.close()
         conn.close()
+    print(count_line)
+    outfile.close()  #uncomment this line if you are writing the INSERT statements to an output file.
+    f.close()
+
+def insert2Categories():
+    #reading the JSON file
+    with open('./yelp_business.JSON','r') as f:    #TODO: update path for the input file
+        outfile =  open('./yelp_categories.SQL', 'w')  #uncomment this line if you are writing the INSERT statements to an output file.
+        line = f.readline()
+        count_line = 0
+
+        #connect to yelpdb database on postgres server using psycopg2
+        #TODO: update the database name, username, and password
+        try:
+            conn = psycopg2.connect("dbname='yelpdb' user='postgres' host='localhost' password='wartech25'")
+        except:
+            print('Unable to connect to the database!')
+        cur = conn.cursor()
+
+        while line:
+            data = json.loads(line)
+            # for category in data['categories']:
+            s = cleanStr4SQL(data['categories'])
+            cat = s.split(", ")
+            for x in cat:
+                sql_str = "INSERT INTO Categories (busID, category) " \
+                        "VALUES ('" + cleanStr4SQL(data['business_id']) + "','" + x +"');"
+                try:
+                        cur.execute(sql_str)
+                except:
+                        print("Insert to businessTABLE failed! \n" + sql_str)
+                        return
+                conn.commit()
+                    # optionally you might write the INSERT statement to a file.
+                count_line +=1
+                outfile.write(sql_str)
+            line = f.readline()
+            
+
+        cur.close()
+        conn.close()
+
     print(count_line)
     outfile.close()  #uncomment this line if you are writing the INSERT statements to an output file.
     f.close()
@@ -171,7 +221,6 @@ def insert2Users():
     print(count_line)
     f.close()
 
-
 def insert2Friends():
     #reading the JSON file
     with open('./yelp_user.JSON','r') as f:    
@@ -204,7 +253,7 @@ def insert2Friends():
     print(count_line)
     outfile.close() 
     f.close()
-    
+
 def insert2Tips():
     with open('./yelp_tip.JSON','r') as f:
         outfile =  open('./yelp_tip.SQL', 'w')
@@ -212,6 +261,7 @@ def insert2Tips():
         count_line = 0
         passedLastBreak = False
         try:
+
             conn = psycopg2.connect("dbname='Milestone2' user='GuestUser' host='localhost' password='abcd123'")
         except Exception as inst:
             print('Unable to connect to the database!' )
@@ -252,6 +302,7 @@ def insert2Checkins():
         count_line = 0
         try:
             conn = psycopg2.connect("dbname='Milestone2' user='GuestUser' host='localhost' password='abcd123'")
+
         except Exception as inst:
             print('Unable to connect to the database!' )
             print(type(inst))
@@ -290,4 +341,6 @@ def insert2Checkins():
 #insert2Users()
 #insert2Tips()
 #insert2Checkins()
-insert2Categories()
+
+#insert2Categories()
+insert2Friends()

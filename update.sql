@@ -1,5 +1,6 @@
 /* numCheckins*/
 UPDATE business
+
 SET numCheckins = (SELECT COUNT(busid) FROM checkin WHERE checkin.busID = business.busid GROUP BY checkin.busID);
 
 /* numTips */
