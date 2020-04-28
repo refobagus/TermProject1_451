@@ -13,7 +13,7 @@ namespace Milestone2
 
         protected string buildConnectionString()
         {
-            return "Host = localhost; username = postgres; Database = yelpdb; password=wartech25";
+            return "Host = localhost; username = GuestUser; Database = Milestone2; password=abcd123";
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -49,7 +49,7 @@ namespace Milestone2
             string StateCount = string.Empty;
             string CityCount = string.Empty;
             cmd.Connection = connection;
-            cmd.CommandText = "SELECT * FROM business WHERE bus_id = " + "'" + businessID + "'";
+            cmd.CommandText = "SELECT * FROM business WHERE busID = " + "'" + businessID + "'";
             try
             {
                 var reader = cmd.ExecuteReader();
@@ -274,7 +274,7 @@ namespace Milestone2
                 lblError.Text = ex.Message;
                 return;
             }
-            cmd.CommandText = "UPDATE business SET numcheckins = numcheckins + 1 WHERE bus_id = '" + busID + "'";
+            cmd.CommandText = "UPDATE business SET numcheckins = numcheckins + 1 WHERE busId = '" + busID + "'";
             try
             {
                 cmd.ExecuteNonQuery();
@@ -284,7 +284,7 @@ namespace Milestone2
                 lblError.Text = ex.Message;
             }
 
-            getCheckinCount(busID);
+            getBusinessData(Request.QueryString["businessID"].ToString());
             btnCheckin.Visible = false;
 
         }
