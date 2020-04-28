@@ -161,6 +161,27 @@ namespace Milestone2
             return;
         }
 
+        protected void editLong()
+        {
+            TextBox tbLong = (TextBox)fvUserForm.FindControl("tbLong");
+            var connection = new NpgsqlConnection(buildConnectionString());
+            connection.Open();
+            var cmd = new NpgsqlCommand();
+            cmd.Connection = connection;
+
+            cmd.CommandText = "UPDATE users SET longitude = '" + tbLong.Text + "' WHERE users.userID = '" + Session["userID"].ToString() + "'";
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                lblError.Text = ex.Message;
+            }
+
+            bindThisUser();
+        }
+
         public class friendTip
         {
             friendTip()
@@ -285,6 +306,22 @@ namespace Milestone2
             btnSelect.Visible = false;
             usernameSelect.Visible = false;
             userDDLSelect.Visible = true;
+        }
+
+        protected void btnSubmitLat_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        protected void btnSubmitLong_Click(object sender, EventArgs e)
+        {
+            editLong();
+        }
+
+        protected void btnUpdateLong_Click(object sender, EventArgs e)
+        {
+            fvUserForm.FindControl("divLongitude").Visible = false;
+            fvUserForm.FindControl("divLongUpdate").Visible = true;
         }
     }
 }

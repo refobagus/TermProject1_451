@@ -336,6 +336,8 @@ namespace Milestone2
                 {
                     lblError.Text = ex.Message;
                 }
+
+                btn.Visible = false;
                 getTips();
 
 
