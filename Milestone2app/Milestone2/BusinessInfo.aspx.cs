@@ -13,7 +13,7 @@ namespace Milestone2
 
         protected string buildConnectionString()
         {
-            return "Host = localhost; username = GuestUser; Database = Milestone2; password=abcd123";
+            return "Host = localhost; username = postgres; Database = yelpdb; password=wartech25";
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -49,7 +49,7 @@ namespace Milestone2
             string StateCount = string.Empty;
             string CityCount = string.Empty;
             cmd.Connection = connection;
-            cmd.CommandText = "SELECT * FROM business WHERE busid = " + "'" + businessID + "'";
+            cmd.CommandText = "SELECT * FROM business WHERE bus_id = " + "'" + businessID + "'";
             try
             {
                 var reader = cmd.ExecuteReader();
@@ -236,7 +236,7 @@ namespace Milestone2
 
             var cmd = new NpgsqlCommand();
             cmd.Connection = connection;
-            cmd.CommandText = "INSERT INTO tip (userID, busID, madeOn, tip, likes) VALUES ('" + userID + "','" + busID + "','" + DateTime.Now + "','" + tbTip.Text.Trim() + "','" + 0 + "');";
+            cmd.CommandText = "INSERT INTO tip (busid, userid, likes, tip, madeon) VALUES ('" + busID + "','" + userID + "','" + 0 + "','" + tbTip.Text.Trim() + "','" + DateTime.Now + "');";
             try
             {
                 var executer = cmd.ExecuteNonQuery();
@@ -254,7 +254,40 @@ namespace Milestone2
             btnNewTip.Visible = true;
             
         }
+        protected void BtnCheckin_Click(object sender, EventArgs e)
+        {
+            string busID = Request.QueryString["BusinessID"].ToString();
 
+            var connection = new NpgsqlConnection(buildConnectionString());
+
+            connection.Open();
+
+            var cmd = new NpgsqlCommand();
+            cmd.Connection = connection;
+            cmd.CommandText = "INSERT INTO checkin (busid, date) VALUES ('"+ busID + "','" + DateTime.Now + "');";
+            try
+            {
+                var executer = cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = ex.Message;
+                return;
+            }
+            cmd.CommandText = "UPDATE business SET numcheckins = numcheckins + 1 WHERE bus_id = '" + busID + "'";
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = ex.Message;
+            }
+
+            getCheckinCount(busID);
+            btnCheckin.Visible = false;
+
+        }
         protected void CancelNewTip_Click(object sender, EventArgs e)
         {
             divNewTip.Visible = false;

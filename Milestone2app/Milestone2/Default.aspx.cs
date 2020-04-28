@@ -13,7 +13,7 @@ namespace Milestone2
 
         protected string buildConnectionString()
         {
-            return "Host = localhost; username = GuestUser; Database = Milestone2; password=abcd123";
+            return "Host = localhost; username = postgres; Database = yelpdb; password=wartech25";
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -141,8 +141,8 @@ namespace Milestone2
 
             if (!String.IsNullOrEmpty(lbCategories.SelectedValue))
             {
-                cmd.CommandText = "SELECT DISTINCT business.busID, business.name, business.state, business.city " +
-                    "FROM business INNER JOIN Categories ON business.busID = Categories.busID" +
+                cmd.CommandText = "SELECT DISTINCT business.bus_id, business.name, business.state, business.city " +
+                    "FROM business INNER JOIN Categories ON business.bus_id = Categories.busID" +
                     " WHERE category = '" + lbCategories.SelectedValue + "' AND postal_code = '" + lbPostalCode.SelectedValue + "' ORDER BY business.name";
             }
             else if (!String.IsNullOrEmpty(lbPostalCode.SelectedValue))
@@ -191,7 +191,7 @@ namespace Milestone2
             cmd.Connection = connection;
             if (!string.IsNullOrEmpty(lbCities.SelectedValue) && !String.IsNullOrEmpty(lbStates.SelectedValue) && !String.IsNullOrEmpty(lbPostalCode.SelectedValue))
             {
-                cmd.CommandText = "SELECT DISTINCT category FROM Categories INNER JOIN Business on Business.busID = Categories.busID WHERE business.State = '"
+                cmd.CommandText = "SELECT DISTINCT category FROM Categories INNER JOIN Business on Business.bus_id = Categories.busID WHERE business.State = '"
                 + lbStates.SelectedValue + "' AND Business.city = '" + lbCities.SelectedValue + "' AND business.postal_code = '" + lbPostalCode.SelectedValue + "' ORDER BY category";
                 try
                 {
