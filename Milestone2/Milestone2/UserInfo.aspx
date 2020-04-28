@@ -87,7 +87,9 @@
         </div>
 
         <div id="friendsTips">
-            <asp:GridView ID="gvTipsFriends" runat="server" AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal" EmptyDataText="Still No Friends">
+            <asp:GridView ID="gvTipsFriends" runat="server" AutoGenerateColumns="False"
+                BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" 
+                GridLines="Horizontal" EmptyDataText="Still No Friends">
                 <Columns>
                     <asp:BoundField DataField="name" HeaderText="Name" />
                     <asp:BoundField DataField="business" HeaderText="Business" />
