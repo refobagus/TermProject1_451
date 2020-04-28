@@ -42,6 +42,7 @@
         <br />
         <div id="divLoggedIn" runat="server" visible="false">
             <a id="btnNewTip" class="btn btn-primary" runat="server">Add a Tip</a>
+            <asp:Button CssClass="btn btn-primary" ID="btnCheckin" runat="server" OnClick="BtnCheckin_Click" Text="Check In" />
             <div id="divNewTip" style="display: none" runat="server">
                
                 <asp:TextBox ID="tbTip" TextMode="MultiLine" style="min-width:80%; font-size:16px; text-align:left;" runat="server">
