@@ -13,5 +13,11 @@ namespace Milestone2
         {
 
         }
+
+        protected void Unnamed_ServerClick(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Response.Redirect("UserInfo.aspx");
+        }
     }
 }

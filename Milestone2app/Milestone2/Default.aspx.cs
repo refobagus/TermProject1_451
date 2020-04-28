@@ -13,7 +13,7 @@ namespace Milestone2
 
         protected string buildConnectionString()
         {
-            return "Host = localhost; username = postgres; Database = yelpdb; password=wartech25";
+            return "Host = localhost; username = GuestUser; Database = Milestone2; password=abcd123";
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -135,15 +135,31 @@ namespace Milestone2
             var connection = new NpgsqlConnection(buildConnectionString());
             connection.Open();
             List<Business> businesses = new List<Business>();
-
+            List<string> Categories = new List<string>();
             var cmd = new NpgsqlCommand();
             cmd.Connection = connection;
 
-            if (!String.IsNullOrEmpty(lbCategories.SelectedValue))
+            foreach(ListItem category in cbCategories.Items)
             {
-                cmd.CommandText = "SELECT DISTINCT business.bus_id, business.name, business.state, business.city " +
-                    "FROM business INNER JOIN Categories ON business.bus_id = Categories.busID" +
-                    " WHERE category = '" + lbCategories.SelectedValue + "' AND postal_code = '" + lbPostalCode.SelectedValue + "' ORDER BY business.name";
+                if (category.Selected == true)
+                {
+                    Categories.Add(category.Value);
+                }
+            }
+            if (Categories.Count > 0)
+            {
+                string tail = "') AND postal_code = '" + lbPostalCode.SelectedValue + "' ORDER BY business.name";
+                string head = "SELECT DISTINCT business.busID, business.name, business.state, business.city " +
+                    "FROM business INNER JOIN Categories ON business.busID = Categories.busID" +
+                    " WHERE (category = '";
+                string selectCategories = string.Empty;
+                foreach(string cat in Categories){
+                    selectCategories += (cat + "' OR category = '");
+                }
+
+                cmd.CommandText = head + selectCategories + tail;
+                lbCategories.DataSource = Categories;
+                lbCategories.DataBind();
             }
             else if (!String.IsNullOrEmpty(lbPostalCode.SelectedValue))
             {
@@ -191,7 +207,7 @@ namespace Milestone2
             cmd.Connection = connection;
             if (!string.IsNullOrEmpty(lbCities.SelectedValue) && !String.IsNullOrEmpty(lbStates.SelectedValue) && !String.IsNullOrEmpty(lbPostalCode.SelectedValue))
             {
-                cmd.CommandText = "SELECT DISTINCT category FROM Categories INNER JOIN Business on Business.bus_id = Categories.busID WHERE business.State = '"
+                cmd.CommandText = "SELECT DISTINCT category FROM Categories INNER JOIN Business on Business.busID = Categories.busID WHERE business.State = '"
                 + lbStates.SelectedValue + "' AND Business.city = '" + lbCities.SelectedValue + "' AND business.postal_code = '" + lbPostalCode.SelectedValue + "' ORDER BY category";
                 try
                 {
@@ -209,6 +225,8 @@ namespace Milestone2
                 }
                 lbCategories.DataSource = categories;
                 lbCategories.DataBind();
+                cbCategories.DataSource = categories;
+                cbCategories.DataBind();
                 divCategories.Visible = true;
                 connection.Close();
                 return;
@@ -316,11 +334,6 @@ namespace Milestone2
             getBusinesses();
         }
 
-        protected void lbCategories_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            getBusinesses();
-        }
-
         protected void ddlUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = ddlUser.SelectedItem.Text;
@@ -340,6 +353,25 @@ namespace Milestone2
             btnSelect.Visible = false;
             usernameSelect.Visible = false;
             userDDLSelect.Visible = true;
+        }
+
+        protected void btnAddCategoryFilter_Click(object sender, EventArgs e)
+        {
+            getBusinesses();
+        }
+
+        protected void btnRemoveCategoryFilter_Click(object sender, EventArgs e)
+        {
+            foreach(ListItem cat in cbCategories.Items)
+            {
+                if(cat.Selected == true)
+                {
+                    cat.Selected = false;
+                }
+            }
+            lbCategories.DataSource = new List<string>();
+            lbCategories.DataBind();
+            getBusinesses();
         }
     }
 }

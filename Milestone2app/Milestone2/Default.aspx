@@ -40,22 +40,26 @@
 
         <div id="divSelectors" class="SidSelectors" runat="server">
             <p>State</p>
-            <asp:ListBox ID="lbStates" Style="width: 30%; height: 10%;" runat="server" OnSelectedIndexChanged="lbStates_SelectedIndexChanged" AutoPostBack="true" SelectionMode="Multiple"></asp:ListBox>
+            <asp:ListBox ID="lbStates" Style="width: 30%; height: 10%;" runat="server" OnSelectedIndexChanged="lbStates_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>
             <div id="divCity" runat="server" style="height: 20%" visible="false">
                 <p>City</p>
-                <asp:ListBox ID="lbCities" Style="width: 30%; height: 100%" runat="server" OnSelectedIndexChanged="lbCities_SelectedIndexChanged" AutoPostBack="true" SelectionMode="Multiple"></asp:ListBox>
+                <asp:ListBox ID="lbCities" Style="width: 30%; height: 100%" runat="server" OnSelectedIndexChanged="lbCities_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>
             </div>
             <br />
             <br />
             <div id="divPostalCodes" style="height: 30%" runat="server" visible="false">
                 <p>Postal Code</p>
-                <asp:ListBox ID="lbPostalCode" Style="width: 30%; height: 100%" runat="server" OnSelectedIndexChanged="lbPostalCode_SelectedIndexChanged" AutoPostBack="true" SelectionMode="Multiple"></asp:ListBox>
+                <asp:ListBox ID="lbPostalCode" Style="width: 30%; height: 100%" runat="server" OnSelectedIndexChanged="lbPostalCode_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>
             </div>
             <br />
             <br />
             <div id="divCategories" style="height: 30%;" runat="server" visible="false">
                 <p>Categories</p>
-                <asp:ListBox ID="lbCategories" Style="height: 100%" runat="server" OnSelectedIndexChanged="lbCategories_SelectedIndexChanged" AutoPostBack="true" SelectionMode="Multiple"></asp:ListBox>
+                <asp:CheckBoxList ID="cbCategories" runat="server" Style="text-align:left; position:relative; left:30%"  />
+                <asp:ListBox ID="lbCategories" runat="server" Enabled="false"></asp:ListBox>
+                <br />
+                <asp:Button ID="btnAddCategoryFilter" runat="server" OnClick="btnAddCategoryFilter_Click" Text="Add Category Filters" />
+                <asp:Button ID="btnRemoveCategoryFilter" runat="server" OnClick="btnRemoveCategoryFilter_Click" Text="Clear Category Filters" />
             </div>
         </div>
 

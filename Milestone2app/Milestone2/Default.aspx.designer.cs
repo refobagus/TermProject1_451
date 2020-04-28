@@ -141,6 +141,15 @@ namespace Milestone2
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCategories;
 
         /// <summary>
+        /// cbCategories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList cbCategories;
+
+        /// <summary>
         /// lbCategories control.
         /// </summary>
         /// <remarks>
@@ -148,6 +157,24 @@ namespace Milestone2
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox lbCategories;
+
+        /// <summary>
+        /// btnAddCategoryFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAddCategoryFilter;
+
+        /// <summary>
+        /// btnRemoveCategoryFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnRemoveCategoryFilter;
 
         /// <summary>
         /// gvBusinesses control.
