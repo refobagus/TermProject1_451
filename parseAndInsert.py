@@ -228,7 +228,7 @@ def insert2Friends():
         line = f.readline()
         count_line = 0
         try:
-            conn = psycopg2.connect("dbname='yelpdb' user='postgres' host='localhost' password='wartech25'")
+            conn = psycopg2.connect("dbname='Milestone2' user='GuestUser' host='localhost' password='abcd123'")
         except:
             print('Unable to connect to the database!')
         cur = conn.cursor()
@@ -236,13 +236,16 @@ def insert2Friends():
         while line:
             data = json.loads(line)
             for val in data['friends']:
-                sql_str = "INSERT INTO Friends (user_ID, friend_ID) " \
+                sql_str = "INSERT INTO Friends (userID, friendID) " \
                           "VALUES ('" + cleanStr4SQL(data['user_id']) + "', '"  + str(val) + "');"
                 
                 try:
                     cur.execute(sql_str)
-                except:
-                    print("Insert to friendsTABLE failed!" )
+                except Exception as inst:
+                    print("Insert to TipsTable failed! \n" + sql_str)
+                    print(type(inst))
+                    print(inst.args)
+                    print(inst)
                 conn.commit()
                 outfile.write(sql_str + '\n')
             line = f.readline()
